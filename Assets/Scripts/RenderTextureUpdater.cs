@@ -1,29 +1,27 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class RenderTextureUpdater : MonoBehaviour
 {
-    public RenderTexture renderTexture;
-    public Camera renderCamera;
-    public int targetFrameRate = 30; 
-    private float timeBetweenUpdates; 
-    private float timeSinceLastUpdate = 0f;
+    public int targetFPS = 20;
+    private float frameTime;
+    private float elapsed;
+    private Camera cam;
 
     void Start()
     {
-        timeBetweenUpdates = 1f / targetFrameRate;
+        cam = GetComponent<Camera>();
+        cam.enabled = false;
+        frameTime = 1f / targetFPS;
     }
 
     void Update()
     {
-        
-        timeSinceLastUpdate += Time.deltaTime;
-
-        
-        if (timeSinceLastUpdate >= timeBetweenUpdates)
+        elapsed += Time.deltaTime;
+        if (elapsed >= frameTime)
         {
-            timeSinceLastUpdate = 0f; // Сбросить таймер
-            renderCamera.targetTexture = renderTexture;
-            renderCamera.Render(); // Обновляем RenderTexture
+            elapsed -= frameTime;
+            cam.Render();
         }
     }
 }
