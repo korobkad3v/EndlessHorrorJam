@@ -3,6 +3,7 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
     
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
     
     private bool isGrounded = true;
 
-    private Rigidbody rb;
+    public Rigidbody rb;
 
     [Header("Movement State")]
     public MovementState movementState;
@@ -48,6 +49,9 @@ public class PlayerController : MonoBehaviour
         crouch,
         air
     };
+
+    private float stepTimer = 0f;
+    public float stepInterval = 0.5f;
 
     void Start()
     {
@@ -60,6 +64,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 inputVector = inputValue.Get<Vector2>();
         moveDirection = orientation.forward * inputVector.y + orientation.right * inputVector.x;
+       
     }
 
     public void OnSprint(InputValue inputValue) 
@@ -97,6 +102,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             Invoke(nameof(ResetJump), jumpCooldown);
+            AudioManager.Instance.Play("jump");
         }        
     }
 
@@ -149,6 +155,9 @@ public class PlayerController : MonoBehaviour
         SpeedControl();
         MovementStateHandler();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundMask);
+
+        playFootstepSound();
+        
     }
 
     void FixedUpdate() 
@@ -160,9 +169,22 @@ public class PlayerController : MonoBehaviour
         else 
         {
             rb.AddForce(moveDirection.normalized * speed * airMultiplier, ForceMode.Force);
+        }   
+    }
+
+    private void playFootstepSound()
+    {
+        stepTimer -= Time.deltaTime;
+        if (movementState == MovementState.walk && stepTimer <= 0f && rb.linearVelocity.magnitude > 1f) 
+        {
+            AudioManager.Instance.Play("footstep");
+            stepTimer = stepInterval;
         }
-        
-        
+        else if (movementState == MovementState.sprint && stepTimer <= 0f && rb.linearVelocity.magnitude > 1f)
+        {
+            AudioManager.Instance.Play("footstep_sprint");
+            stepTimer = stepInterval / 2f;
+        }
     }
 
 

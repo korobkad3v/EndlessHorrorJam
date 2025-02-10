@@ -4,7 +4,7 @@ using UnityEngine;
 public class RenderTextureUpdater : MonoBehaviour
 {
     public int targetFPS = 20;
-    private float frameTime;
+    public float frameTime;
     private float elapsed;
     private Camera cam;
 
