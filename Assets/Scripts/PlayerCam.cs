@@ -21,6 +21,8 @@ public class PlayerCam : MonoBehaviour
     public float zRotation_dPad = 0f;
     public float magnitudeThreshold = 0.1f;
 
+    private Vector2 lastInputVector = Vector2.zero;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -46,12 +48,22 @@ public class PlayerCam : MonoBehaviour
             xRotation_dPad = Mathf.Clamp(xRotation_dPad, -dPad.clampValues.x, dPad.clampValues.x);
             zRotation_dPad = Mathf.Clamp(zRotation_dPad, -dPad.clampValues.y, dPad.clampValues.y);
 
+            if (Mathf.Abs(inputVector.normalized.x - lastInputVector.normalized.x) > magnitudeThreshold || Mathf.Abs(inputVector.normalized.y - lastInputVector.normalized.y) > magnitudeThreshold)  
+            {
+                AudioManager.Instance.Play("click_4");  
+                  
+            }
+
+            lastInputVector = inputVector.normalized;  
+
         }
         else
         {
             xRotation_dPad = 0f;
             zRotation_dPad = 0f;
         }
+
+        
 
         // Apply
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
