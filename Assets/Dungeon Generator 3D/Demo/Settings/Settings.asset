@@ -16,8 +16,8 @@ MonoBehaviour:
     minRooms: 10
     maxRooms: 15
     amountOfAdjacentRoomsToConnect: 3
-    minRoomWidth: 16
-    maxRoomWidth: 24
+    minRoomWidth: 8
+    maxRoomWidth: 12
     minRoomHeight: 8
     maxRoomHeight: 12
     minBossRoomWidth: 10
@@ -50,7 +50,9 @@ MonoBehaviour:
     minEnemiesPerRoom: 0
     maxEnemiesPerRoom: 0
     enemies: []
-    bosses: []
+    bosses:
+    - gameObject: {fileID: 919132149155446097, guid: 695f0f2f1dd14cc4da5e08d1fa754afe, type: 3}
+      name: boss
     breakables: []
     staticObjects: []
     wallObjects: []
