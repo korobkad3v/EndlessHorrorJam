@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Player Cam")]
+    public PlayerCam cam;
     
     [Header("Movement")]
     private float speed = 0f;
@@ -13,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public float sprintSpeed = 10f;
     public float crouchSpeed = 2.5f;
     public float airSpeed = 0f;
+    public float stamina = 100f;
+    public float staminaDrainRate = 10f;
 
     Vector3 moveDirection = Vector3.zero;
     public Transform orientation;
@@ -49,7 +53,6 @@ public class PlayerController : MonoBehaviour
         crouch,
         air
     };
-
     private float stepTimer = 0f;
     public float stepInterval = 0.5f;
 
@@ -69,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnSprint(InputValue inputValue) 
     {
-        if (inputValue.isPressed && !isSprinting && movementState == MovementState.walk)
+        if (inputValue.isPressed && !isSprinting && movementState == MovementState.walk && stamina > 0) 
         {
             isSprinting = true;
         }
@@ -96,11 +99,12 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue inputValue) 
     {
-        if (readyToJump && isGrounded)
+        if (readyToJump && isGrounded && stamina > 10f)
         {
             readyToJump = false;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+            stamina = stamina - 10f;
             Invoke(nameof(ResetJump), jumpCooldown);
             AudioManager.Instance.Play("jump");
         }        
@@ -129,24 +133,28 @@ public class PlayerController : MonoBehaviour
             movementState = MovementState.sprint;
             speed = sprintSpeed;
             rb.linearDamping = standartDrag;
+            cam.changeFOV(cam.FOV * 1.5f, 2f);
         }
         else if (isGrounded && !isSprinting) 
         {
             movementState = MovementState.walk;
             speed = walkSpeed;
             rb.linearDamping = standartDrag;
+            cam.changeFOV(cam.FOV * 1f);
         }
         else if (isGrounded && isCrouching) 
         {
             movementState = MovementState.crouch;
             speed = crouchSpeed;
             rb.linearDamping = standartDrag;
+            cam.changeFOV(cam.FOV * 1f);
         }
         else 
         {
             movementState = MovementState.air;
             speed = airSpeed;
             rb.linearDamping = standartDragAir;
+            cam.changeFOV(cam.FOV * 1f);
         }
     }
 
@@ -155,9 +163,26 @@ public class PlayerController : MonoBehaviour
         SpeedControl();
         MovementStateHandler();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundMask);
-
+        Stamina();
         playFootstepSound();
-        
+    }
+
+    void Stamina()
+    {
+        if (isSprinting && rb.linearVelocity.magnitude > 1f && stamina > 0) 
+        {
+            stamina -= staminaDrainRate * Time.deltaTime;
+        }
+
+        if (stamina <= 0) 
+        {
+            isSprinting = false;
+        }
+
+        if (!isSprinting && stamina < 100f) 
+        {
+            stamina += staminaDrainRate / 15 * Time.deltaTime;
+        }
     }
 
     void FixedUpdate() 

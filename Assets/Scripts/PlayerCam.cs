@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class PlayerCam : MonoBehaviour
     public float xRotation = 0f;
     public float yRotation = 0f;
 
+    [Range(1f, 180f)]
+    public float FOV = 60f  ;
+
     public Transform orientation;
 
     [Header("Animation")]
@@ -22,11 +26,33 @@ public class PlayerCam : MonoBehaviour
     public float magnitudeThreshold = 0.1f;
 
     private Vector2 lastInputVector = Vector2.zero;
+    
+    private Camera cam;
+    // bad code
+    private int badCode = 1;
+    private int badCodeCounter = 0;
+
+    private void BadCode()
+    {
+        if (badCodeCounter < badCode) 
+        {
+            cam.enabled = true;
+            badCodeCounter++;
+        }
+        
+    }
+
+    void Awake()
+    {
+        cam = GetComponent<Camera>();
+        cam.fieldOfView = FOV;
+    }
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     void OnLook(InputValue inputValue) 
@@ -38,8 +64,7 @@ public class PlayerCam : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        // DPad animation
-        
+        // DPad animation    
         if (inputVector.magnitude > magnitudeThreshold)
         {
             xRotation_dPad = inputVector.y * sensX;
@@ -63,8 +88,6 @@ public class PlayerCam : MonoBehaviour
             zRotation_dPad = 0f;
         }
 
-        
-
         // Apply
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
@@ -73,8 +96,14 @@ public class PlayerCam : MonoBehaviour
             dPad.smoothSpeed * Time.deltaTime);
     }
 
+    public void changeFOV(float fov, float tMod = 1)
+    {
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fov, Time.deltaTime * tMod);
+    }
+
     void Update()
     {
         dPad.RotateToZero();
+        BadCode();
     }
 }
