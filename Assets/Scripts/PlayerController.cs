@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     
     private bool isGrounded = true;
 
+    [HideInInspector]
     public Rigidbody rb;
 
     [Header("Movement State")]

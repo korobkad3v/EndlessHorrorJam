@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Ground
   - Room
+  - Wall
+  - OuterCorner
+  - Floor
+  - Bed
   layers:
   - Default
   - TransparentFX

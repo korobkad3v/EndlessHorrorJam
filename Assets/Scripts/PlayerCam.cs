@@ -27,7 +27,7 @@ public class PlayerCam : MonoBehaviour
 
     private Vector2 lastInputVector = Vector2.zero;
     
-    private Camera cam;
+    public Camera cam;
     // bad code
     private int badCode = 1;
     private int badCodeCounter = 0;
@@ -44,7 +44,12 @@ public class PlayerCam : MonoBehaviour
 
     void Awake()
     {
-        cam = GetComponent<Camera>();
+        if (cam == null) 
+        {
+            cam = GetComponent<Camera>();
+            Debug.Log("Camera assigned in Awake: " + (cam != null));
+        }
+
         cam.fieldOfView = FOV;
     }
 

@@ -28,19 +28,27 @@ MonoBehaviour:
     areaHeight: 100
     minDistanceBetweenRooms: 1
     walls:
-    - gameObject: {fileID: 2029398977190003200, guid: a042be25eb2a0f948a7a7de42bb25b00, type: 3}
+    - gameObject: {fileID: 4725644372996588504, guid: 43095fcafffa97640a83ae7643185166, type: 3}
       name: wall_0
-    outerCorners: []
+    outerCorners:
+    - gameObject: {fileID: 696436432277967871, guid: 4394445d39cd5ca45a8727a1e11848b6, type: 3}
+      name: O_0
     innerCorners: []
     deleteInnerCorners: 0
-    uCorners: []
-    squareCorners: []
+    uCorners:
+    - gameObject: {fileID: 3197583449942763538, guid: 216faa9379c6d834cbfc50fd8fee5ca8, type: 3}
+      name: U_0
+    squareCorners:
+    - gameObject: {fileID: 3746928169460061138, guid: 51aaa9039dc8b0c41931f983e71ac814, type: 3}
+      name: S_0
     doors: []
     doorsDisplacements: []
     flooring:
-    - gameObject: {fileID: 2725522295174665091, guid: 8ea9490c4db2b944db876d8349fe4d8b, type: 3}
+    - gameObject: {fileID: 8761019777689142071, guid: d8f1516f7be295a4fb75996c15975e71, type: 3}
       name: floor_0
-    player: {fileID: 0}
+    player: {fileID: 7998694357748044982, guid: e78171f39c252e045a5412796bbf13d2, type: 3}
+    cameraHolder: {fileID: 9129025175442417396, guid: 9cf321c6823dff149af92cbeca5c7cda, type: 3}
+    mokia: {fileID: 0}
     minEnemiesPerRoom: 0
     maxEnemiesPerRoom: 0
     enemies: []
