@@ -52,5 +52,6 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         Play("ambient_0");
+        Play("ambient_inner_0");
     }
 }

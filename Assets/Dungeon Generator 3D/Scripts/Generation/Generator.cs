@@ -224,7 +224,7 @@ public class Generator : MonoBehaviour
         player = settings.player;
         if(player == null)
             Debug.Log("Player is null or nonexistent.");
-            
+
         enemies = settings.enemies;
         if (!CheckListObject(Enemies))
             Debug.Log("Enemies are null or nonexistent.");
@@ -1882,12 +1882,12 @@ public class Generator : MonoBehaviour
         { 
             player = Instantiate(Player, PlayerSpawnRoom.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity , gameObject.transform);
             // cameraHolder = Instantiate(CameraHolder, player.transform.position, Quaternion.identity, gameObject.transform);
-            player.GetComponent<PlayerController>().cam = GameManager.Instance.CameraHolder.GetComponentInChildren<PlayerCam>();
-            GameManager.Instance.CameraHolder.GetComponentInChildren<PlayerCam>().orientation = player.GetComponentInChildren<Orientation>().gameObject.transform;
-            GameManager.Instance.CameraHolder.GetComponentInChildren<PlayerCam>().dPad = GameManager.Instance.mokia.GetComponentInChildren<DPad>();
-            GameManager.Instance.CameraHolder.GetComponentInChildren<MoveCamera>().cameraPosition = player.GetComponentInChildren<Orientation>().gameObject.transform;
-            GameManager.Instance.CameraHolder.GetComponentInChildren<HeadBob>().playerController = player.GetComponent<PlayerController>();
-            GameManager.Instance.staminaBar.playerController = player.GetComponent<PlayerController>();
+            player.GetComponent<PlayerController>().cam = EarlyLoader.Instance.CameraHolder.GetComponentInChildren<PlayerCam>();
+            EarlyLoader.Instance.CameraHolder.GetComponentInChildren<PlayerCam>().orientation = player.GetComponentInChildren<Orientation>().gameObject.transform;
+            EarlyLoader.Instance.CameraHolder.GetComponentInChildren<PlayerCam>().dPad = EarlyLoader.Instance.mokia.GetComponentInChildren<DPad>();
+            EarlyLoader.Instance.CameraHolder.GetComponentInChildren<MoveCamera>().cameraPosition = player.GetComponentInChildren<Orientation>().gameObject.transform;
+            EarlyLoader.Instance.CameraHolder.GetComponentInChildren<HeadBob>().playerController = player.GetComponent<PlayerController>();
+            EarlyLoader.Instance.staminaBar.playerController = player.GetComponent<PlayerController>();
         }
 
         if(bosses.Count > 0)

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public float stamina = 100f;
     public float staminaDrainRate = 10f;
 
+    private Vector2 currentMoveInput;
     Vector3 moveDirection = Vector3.zero;
     public Transform orientation;
     public float standartDrag = 5f;
@@ -66,9 +67,7 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue inputValue) 
     {
-        Vector2 inputVector = inputValue.Get<Vector2>();
-        moveDirection = orientation.forward * inputVector.y + orientation.right * inputVector.x;
-       
+        currentMoveInput = inputValue.Get<Vector2>();
     }
 
     public void OnSprint(InputValue inputValue) 
@@ -161,6 +160,7 @@ public class PlayerController : MonoBehaviour
 
     void Update() 
     {
+        moveDirection = orientation.forward * currentMoveInput.y + orientation.right * currentMoveInput.x;
         SpeedControl();
         MovementStateHandler();
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundMask);
@@ -213,5 +213,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Bed")
+        {
+            GameManager.Instance.TRAPPED();
+        }
+    }
 }

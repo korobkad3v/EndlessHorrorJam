@@ -1,13 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    
     public static GameManager Instance { get; private set; }
-    public GameObject mokia;
-    public StaminaBar staminaBar;
-    public Canvas innerUI;
-    public GameObject CameraHolder;
 
     private void Awake()
     {
@@ -15,12 +11,24 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
     }
-    
 
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 
+    public void TRAPPED()
+    {
+        LoadScene("limb");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
